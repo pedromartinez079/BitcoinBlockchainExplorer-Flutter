@@ -39,6 +39,7 @@ dependencies:
   flutter_riverpod: ^3.0.3
   shared_preferences: ^2.5.3
   intl: ^0.20.2
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:
@@ -92,3 +93,12 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true 
+  image_path: "assets/icon/icon.png"
+  # image_path_android: "assets/icon/android_icon.png"
+  # image_path_ios: "assets/icon/ios_icon.png"
+  # adaptive_icon_background: "#ffffff" # Only for Android
+  #adaptive_icon_foreground: "assets/icon/icon-foreground.png" # Only for Android
