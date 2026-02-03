@@ -253,13 +253,15 @@ class _NetworkStatusScreenState extends ConsumerState<NetworkStatusScreen> {
           // Last Block screen
           IconButton(
             onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (ctx) => BlockScreen(
-                    blockHash: _networkStatus!['lastblockhash'],
-                  ),
-                )
-              );
+              if (_isNetworkStatusFetched) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (ctx) => BlockScreen(
+                      blockHash: _networkStatus!['lastblockhash'],
+                    ),
+                  )
+                );
+              }
             },
             icon: Icon(Icons.currency_bitcoin),
           ),

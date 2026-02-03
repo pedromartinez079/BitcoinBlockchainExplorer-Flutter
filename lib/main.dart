@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:bitcoin_blockchain_explorer/screens/networkstatus.dart';
+import 'package:bitcoin_blockchain_explorer/screens/settings.dart';
 import 'package:bitcoin_blockchain_explorer/providers/settings_provider.dart';
 
 // Color scheme for Theme
@@ -44,6 +45,7 @@ void main() async {
   runApp(
     ProviderScope(
       child: BitcoinBlokchainExplorer(
+        hasToken: hasToken,
         token: token!,
       )
     )
@@ -51,9 +53,14 @@ void main() async {
 }
 
 class BitcoinBlokchainExplorer extends ConsumerWidget {
-  const BitcoinBlokchainExplorer({super.key, required this.token});
+  const BitcoinBlokchainExplorer({
+    super.key,
+    required this.token,
+    required this.hasToken,
+  });
 
   final String token;
+  final bool hasToken;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -66,7 +73,9 @@ class BitcoinBlokchainExplorer extends ConsumerWidget {
     return MaterialApp(
       title: 'Bitcoin Blockchain Explorer',
       theme: theme,
-      home: NetworkStatusScreen(),
+      home: hasToken
+        ? NetworkStatusScreen()
+        : SettingsScreen()
     );
   }
 }

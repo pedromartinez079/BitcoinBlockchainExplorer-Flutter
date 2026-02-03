@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:bitcoin_blockchain_explorer/providers/settings_provider.dart';
+import 'package:bitcoin_blockchain_explorer/screens/networkstatus.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key,});
@@ -41,7 +42,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   }
 
   // Set Token button method
-  void _saveToken() {
+  void _saveToken() async {
     final token = _tokenController.text;
 
     if (token.isEmpty || token == '') {
@@ -51,6 +52,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     ref.read(settingsProvider.notifier).setSettings(Settings(token: token));
     // Update SharedPreferences
     storetoken(token);
+
+    // Wait and go to Assistant screen
+    await Future.delayed(const Duration(milliseconds: 3000));
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (ctx) => const NetworkStatusScreen(),
+      )
+    );
   }
 
   @override
