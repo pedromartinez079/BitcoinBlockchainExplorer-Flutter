@@ -10,6 +10,7 @@ import 'package:bitcoin_blockchain_explorer/providers/settings_provider.dart';
 import 'package:bitcoin_blockchain_explorer/screens/settings.dart';
 import 'package:bitcoin_blockchain_explorer/screens/search.dart';
 import 'package:bitcoin_blockchain_explorer/screens/block.dart';
+import 'package:bitcoin_blockchain_explorer/screens/about.dart';
 import 'package:bitcoin_blockchain_explorer/widgets/card.dart';
 
 class NetworkStatusScreen extends ConsumerStatefulWidget {
@@ -286,6 +287,17 @@ class _NetworkStatusScreenState extends ConsumerState<NetworkStatusScreen> {
               );
             },
             icon: Icon(Icons.settings),
+          ),
+          // About screen
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (ctx) => AboutScreen(),
+                )
+              );
+            },
+            icon: Icon(Icons.info),
           ),
         ],
       ),
