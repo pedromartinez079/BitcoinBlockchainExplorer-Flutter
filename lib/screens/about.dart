@@ -121,6 +121,18 @@ class AboutScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 16, color: Colors.deepPurple),
                 ),
               ),
+              GestureDetector(
+                onTap: () async {
+                  final Uri url = Uri.parse('https://blockchain.info/');
+                  if (await canLaunchUrl(url)) {
+                    await launchUrl(url);
+                  }
+                },
+                child: Text(
+                  'Blockchain',
+                  style: TextStyle(fontSize: 16, color: Colors.deepPurple),
+                ),
+              ),
             ],
           ),
         ),

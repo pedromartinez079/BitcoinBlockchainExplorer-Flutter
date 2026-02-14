@@ -47,7 +47,7 @@ class _TxScreenState extends ConsumerState<TxScreen> {
     } catch(e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          backgroundColor: Colors.green,
+          backgroundColor: Colors.cyanAccent,
           content: Text('${e.toString()}\nCheck GetBlock token!'),
           duration: Duration(seconds: 5),
         ),
@@ -97,7 +97,7 @@ class _TxScreenState extends ConsumerState<TxScreen> {
           children: [
             // Tx information
             ExplorerElementCard(
-              onTap: () {},
+              onTap: null,
               elements: CardElements(
                 title: 'Id: ${_txInformation!['txid']}',
                 subtitle: 'Hash (Different from Id for segwit): ${_txInformation!['hash']}',
@@ -146,7 +146,7 @@ class _TxScreenState extends ConsumerState<TxScreen> {
             // Show Hex?
             if (_showHex)
               ExplorerElementCard(
-                onTap: () {},
+                onTap: null,
                 elements: CardElements(
                   title: 'Encoded transaction',
                   text: _txInformation!['hex']

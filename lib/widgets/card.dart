@@ -28,7 +28,7 @@ class CardElements {
 class ExplorerElementCard extends StatelessWidget {
   final CardElements elements;
   final double width;
-  final GestureTapCallback onTap;
+  final dynamic onTap; // GestureTapCallback or null
 
   const ExplorerElementCard({
     super.key,

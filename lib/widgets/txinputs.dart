@@ -27,6 +27,15 @@ class TxInputsCard extends StatelessWidget {
               )
             );
           }
+          if (txin['coinbase'] != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Colors.cyanAccent,
+                content: Text('Coinbase Tx has no inputs'),
+                duration: Duration(seconds: 5),
+              ),
+            );
+          }
         }
 
         if (txin['coinbase'] != null) { title = 'Coinbase: ${txin['coinbase']}'; }

@@ -151,7 +151,7 @@ class _NetworkStatusScreenState extends ConsumerState<NetworkStatusScreen> {
           children: [
             // Block height
             ExplorerElementCard(
-              onTap: () {},
+              onTap: null,
               elements: CardElements(
                 title: 'Blocks',
                 text: _networkStatus!['blocks'].toString(),
@@ -159,7 +159,7 @@ class _NetworkStatusScreenState extends ConsumerState<NetworkStatusScreen> {
             ),
             // Hashrate
             ExplorerElementCard(
-              onTap: () {},
+              onTap: null,
               elements: CardElements(
                 title: 'Global Hashrate',
                 subtitle: 'H/s (Last 24h)',
@@ -168,7 +168,7 @@ class _NetworkStatusScreenState extends ConsumerState<NetworkStatusScreen> {
             ),
             // Difficulty
             ExplorerElementCard(
-              onTap: () {},
+              onTap: null,
               elements: CardElements(
                 title: 'Difficulty',
                 text: _networkStatus!['difficulty'].toString(),
@@ -176,7 +176,7 @@ class _NetworkStatusScreenState extends ConsumerState<NetworkStatusScreen> {
             ),
             // Reward per block
             ExplorerElementCard(
-              onTap: () {},
+              onTap: null,
               elements: CardElements(
                 title: 'Reward/block',
                 subtitle: 'Bitcoin units',
@@ -185,7 +185,7 @@ class _NetworkStatusScreenState extends ConsumerState<NetworkStatusScreen> {
             ),
             // Mempool
             ExplorerElementCard(
-              onTap: () {},
+              onTap: null,
               elements: CardElements(
                 tip: 'Fee: Bitcoin units',
                 title: 'Mempool',
@@ -195,7 +195,7 @@ class _NetworkStatusScreenState extends ConsumerState<NetworkStatusScreen> {
             ),
             // Estimated fees
             ExplorerElementCard(
-              onTap: () {},
+              onTap: null,
               elements: CardElements(
                 tip: 'sat/vB (satoshi/virtual Byte)',
                 title: 'Estimated Fees',
@@ -205,7 +205,7 @@ class _NetworkStatusScreenState extends ConsumerState<NetworkStatusScreen> {
             ),
             // Next halving information
             ExplorerElementCard(
-              onTap: () {},
+              onTap: null,
               elements: CardElements(
                 title: 'Next Halving',
                 textLines: nextHalvingTextList,
@@ -213,7 +213,7 @@ class _NetworkStatusScreenState extends ConsumerState<NetworkStatusScreen> {
             ),
             // Bitcoin supply
             ExplorerElementCard(
-              onTap: () {},
+              onTap: null,
               elements: CardElements(
                 title: 'Bitcoin Supply',
                 subtitle: 'Bitcoin units (Max. 21M)',

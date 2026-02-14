@@ -105,7 +105,7 @@ class _BlockScreenState extends ConsumerState<BlockScreen> {
           children: [
             // Block information
             ExplorerElementCard(
-              onTap: () {},
+              onTap: null,
               elements: CardElements(
                 title: 'Height: ${_blockInformation!['height'].toString()}',
                 subtitle: 'hash: ${_blockInformation!['hash']}\n',

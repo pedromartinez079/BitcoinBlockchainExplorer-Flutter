@@ -41,7 +41,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
     } catch(e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          backgroundColor: Colors.green,
+          backgroundColor: Colors.cyanAccent,
           content: Text('Blockchain.com API failed, ${e.toString()}'),
           duration: Duration(seconds: 5),
         ),
@@ -86,7 +86,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
                   'Total sent(sats): ${_walletInformation!['wallet']['total_sent']}',
                 ],
               ), 
-              onTap: () {},
+              onTap: null,
             ),
             const SizedBox(height: 10,),
             Row(
