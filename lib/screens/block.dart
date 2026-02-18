@@ -216,6 +216,7 @@ class _BlockScreenState extends ConsumerState<BlockScreen> {
             onPressed: () {
               setState(() {
                 _isBlockInformationFetched = false;
+                _blockInformation = null;
               });
             },
             icon: Icon(Icons.refresh),

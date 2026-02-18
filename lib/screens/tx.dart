@@ -192,6 +192,7 @@ class _TxScreenState extends ConsumerState<TxScreen> {
                 _showTxInputs = false;
                 _showTxOutputs = false;
               });
+              setState(() { _txInformation = null; });
             },
             icon: Icon(Icons.refresh),
           ),

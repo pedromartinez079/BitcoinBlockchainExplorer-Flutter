@@ -247,6 +247,7 @@ class _NetworkStatusScreenState extends ConsumerState<NetworkStatusScreen> {
             onPressed: () {
               setState(() {
                 _isNetworkStatusFetched = false;
+                _networkStatus = null;
               });
             },
             icon: Icon(Icons.refresh),

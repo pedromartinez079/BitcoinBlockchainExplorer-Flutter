@@ -163,6 +163,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
             onPressed: () {
               setState(() {
                 _isWalletInformationFetched = false;
+                _walletInformation = null;
               });
             },
             icon: Icon(Icons.refresh),

@@ -24,6 +24,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   bool _showBlockResults = false;
   bool _showTxResults = false;
   bool _showWalletResults = false;
+  bool _nothing = true;
+  bool _firstSearch = false;
 
   // Search button method
   _onSearch() async {
@@ -41,6 +43,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       if (blockInformation['result'] != null) {
         setState(() {
           _showBlockResults = true;
+          _nothing = false;
         });        
       } else {
         setState(() {
@@ -59,6 +62,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       if (txInformation['result'] != null) {
         setState(() {
           _showTxResults = true;
+          _nothing = false;
         });        
       } else {
         setState(() {
@@ -77,6 +81,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       if (walletInformation['data'] != null) {
         setState(() {
           _showWalletResults = true;
+          _nothing = false;
         });
       } else {
         setState(() {
@@ -87,7 +92,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       setState(() {
         _showWalletResults = false;
       });
-    }    
+    }
+    _firstSearch = true;
   }
 
   @override
@@ -96,11 +102,6 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       appBar: AppBar(
         title: Text('Search'),
         actions: [
-          // Update screen 
-          IconButton(
-            onPressed: _onSearch,
-            icon: Icon(Icons.refresh),
-          ),
           // Search screen
           IconButton(
             onPressed: () {
@@ -198,6 +199,15 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                     )
                   );
                 }
+              ),
+            // No results
+            if (_nothing && _firstSearch)
+              ExplorerElementCard(
+                elements: CardElements(
+                  title: 'Nothing found.',
+                  text: _searchController.text,
+                ), 
+                onTap: null,
               ),
           ],
         ),

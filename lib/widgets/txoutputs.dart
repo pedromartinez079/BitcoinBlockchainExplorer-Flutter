@@ -40,9 +40,11 @@ class _TxOutputsCardState extends ConsumerState<TxOutputsCard> {
       }
     }
 
-    setState(() {
-      _isTxOutSpentFetched = true;
-    });
+    if (mounted) {
+      setState(() {
+        _isTxOutSpentFetched = true;
+      });
+    }
     
   }
 
