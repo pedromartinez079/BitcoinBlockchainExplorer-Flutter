@@ -15,7 +15,7 @@ An explorer for Bitcoin blockchain where transactions, blocks and addresses info
 
 ## Install
 
-[Google Play (Available soon!)](https://play.google.com)
+[Google Play](https://play.google.com/store/apps/details?id=com.inkawall.bitcoin_blockchain_explorer)
 
 ## Authors
 
