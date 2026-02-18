@@ -33,6 +33,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     final searchString = _searchController.text;
     final regex = RegExp(r'^[a-zA-Z0-9]$');
 
+    _nothing = true;
+
     if (searchString.isEmpty || 
       !regex.hasMatch(searchString[0])) { return; }
 
