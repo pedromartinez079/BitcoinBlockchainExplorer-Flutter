@@ -45,6 +45,7 @@ class _BlockScreenState extends ConsumerState<BlockScreen> {
       });
       _isBlockInformationFetched = true;
     } catch(e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.cyanAccent,
@@ -245,7 +246,7 @@ class _BlockScreenState extends ConsumerState<BlockScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(child: _scaffoldBody),
+      body: SafeArea(child: SingleChildScrollView(child: _scaffoldBody)),
     );
   }
 }

@@ -31,7 +31,7 @@ class TxInputsCard extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 backgroundColor: Colors.cyanAccent,
-                content: Text('Coinbase Tx has no inputs'),
+                content: Text('Coinbase Tx -> coin generation, no inputs, miner reward, tx fees'),
                 duration: Duration(seconds: 5),
               ),
             );

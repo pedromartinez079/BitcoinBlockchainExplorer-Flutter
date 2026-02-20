@@ -45,6 +45,7 @@ class _TxScreenState extends ConsumerState<TxScreen> {
       });
       _isTxInformationFetched = true;
     } catch(e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.cyanAccent,
@@ -220,7 +221,7 @@ class _TxScreenState extends ConsumerState<TxScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(child: _scaffoldBody),
+      body: SafeArea(child: SingleChildScrollView(child: _scaffoldBody)),
     );
   }
 }

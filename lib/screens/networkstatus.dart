@@ -102,6 +102,7 @@ class _NetworkStatusScreenState extends ConsumerState<NetworkStatusScreen> {
       });
       _isNetworkStatusFetched = true;
     } catch(e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.cyanAccent,
@@ -302,7 +303,7 @@ class _NetworkStatusScreenState extends ConsumerState<NetworkStatusScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(child: _scaffoldBody),
+      body: SafeArea(child: SingleChildScrollView(child: _scaffoldBody)),
     );
   }
 }

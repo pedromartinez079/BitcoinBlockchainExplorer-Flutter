@@ -128,90 +128,92 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
           ),
         ],
       ),
-      body: Padding(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Search input
-            TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                labelText: 'Search Block, Tx, or Address',
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Search input
+              TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  labelText: 'Search Block, Tx, or Address',
+                ),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface,
+              const SizedBox(height:40),
+              // Search button
+              ElevatedButton.icon(
+                onPressed: _onSearch,
+                icon: const Icon(Icons.search),
+                label: const Text('Search'),
               ),
-            ),
-            const SizedBox(height:40),
-            // Search button
-            ElevatedButton.icon(
-              onPressed: _onSearch,
-              icon: const Icon(Icons.search),
-              label: const Text('Search'),
-            ),
-            const SizedBox(height:40),
-            // Show block results?
-            if (_showBlockResults)
-              ExplorerElementCard(
-                elements: CardElements(
-                  title: 'Block',
-                  text: _searchController.text,
-                ), 
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (ctx) => BlockScreen(
-                        blockHash: _searchController.text,
-                      ),
-                    )
-                  );
-                }
-              ),
-            // Show tx results?
-            if (_showTxResults)
-              ExplorerElementCard(
-                elements: CardElements(
-                  title: 'Tx',
-                  text: _searchController.text,
-                ), 
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (ctx) => TxScreen(
-                        txHash: _searchController.text,
-                      ),
-                    )
-                  );
-                }
-              ),
-            // Show wallet results?
-            if (_showWalletResults)
-              ExplorerElementCard(
-                elements: CardElements(
-                  title: 'Address',
-                  text: _searchController.text,
-                ), 
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (ctx) => WalletScreen(
-                        address: _searchController.text,
-                      ),
-                    )
-                  );
-                }
-              ),
-            // No results
-            if (_nothing && _firstSearch)
-              ExplorerElementCard(
-                elements: CardElements(
-                  title: 'Nothing found.',
-                  text: _searchController.text,
-                ), 
-                onTap: null,
-              ),
-          ],
+              const SizedBox(height:40),
+              // Show block results?
+              if (_showBlockResults)
+                ExplorerElementCard(
+                  elements: CardElements(
+                    title: 'Block',
+                    text: _searchController.text,
+                  ), 
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (ctx) => BlockScreen(
+                          blockHash: _searchController.text,
+                        ),
+                      )
+                    );
+                  }
+                ),
+              // Show tx results?
+              if (_showTxResults)
+                ExplorerElementCard(
+                  elements: CardElements(
+                    title: 'Tx',
+                    text: _searchController.text,
+                  ), 
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (ctx) => TxScreen(
+                          txHash: _searchController.text,
+                        ),
+                      )
+                    );
+                  }
+                ),
+              // Show wallet results?
+              if (_showWalletResults)
+                ExplorerElementCard(
+                  elements: CardElements(
+                    title: 'Address',
+                    text: _searchController.text,
+                  ), 
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (ctx) => WalletScreen(
+                          address: _searchController.text,
+                        ),
+                      )
+                    );
+                  }
+                ),
+              // No results
+              if (_nothing && _firstSearch)
+                ExplorerElementCard(
+                  elements: CardElements(
+                    title: 'Nothing found.',
+                    text: _searchController.text,
+                  ), 
+                  onTap: null,
+                ),
+            ],
+          ),
         ),
       ),
     );

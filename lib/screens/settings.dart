@@ -24,18 +24,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     
     try {
       await prefs.setString('token', token);
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.cyanAccent,
-          content: Text(e.toString()),
-        ),
-      );
-    } finally {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.cyanAccent,
           content: Text('GetBlock Token saved.'),
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.cyanAccent,
+          content: Text(e.toString()),
         ),
       );
     }
@@ -55,6 +56,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
     // Wait and go to Assistant screen
     await Future.delayed(const Duration(milliseconds: 3000));
+    if (!mounted) return;
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (ctx) => const NetworkStatusScreen(),
@@ -66,40 +68,42 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Settings'),),
-      body: Padding(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Set Token input
-            TextField(
-              controller: _tokenController,
-              obscureText: _obscureApiKey,
-              decoration: InputDecoration(
-                labelText: 'GetBlock token',
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _obscureApiKey
-                    ? Icons.visibility
-                    : Icons.visibility_off,
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Set Token input
+              TextField(
+                controller: _tokenController,
+                obscureText: _obscureApiKey,
+                decoration: InputDecoration(
+                  labelText: 'GetBlock token',
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscureApiKey
+                      ? Icons.visibility
+                      : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() => _obscureApiKey = !_obscureApiKey);
+                    },
                   ),
-                  onPressed: () {
-                    setState(() => _obscureApiKey = !_obscureApiKey);
-                  },
+                ),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface,
+              const SizedBox(height:40),
+              // Set Token button
+              ElevatedButton.icon(
+                onPressed: _saveToken,
+                icon: const Icon(Icons.key),
+                label: const Text('Set Token'),
               ),
-            ),
-            const SizedBox(height:40),
-            // Set Token button
-            ElevatedButton.icon(
-              onPressed: _saveToken,
-              icon: const Icon(Icons.key),
-              label: const Text('Set Token'),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

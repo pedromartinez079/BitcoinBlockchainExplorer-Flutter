@@ -39,6 +39,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
       });
       _isWalletInformationFetched = true;
     } catch(e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.cyanAccent,
@@ -192,7 +193,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(child: _scaffoldBody),
+      body: SafeArea(child: SingleChildScrollView(child: _scaffoldBody)),
     );
   }
 }
