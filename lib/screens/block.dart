@@ -30,6 +30,8 @@ class _BlockScreenState extends ConsumerState<BlockScreen> {
   bool _isLastBlock = false;
   Widget? _scaffoldBody;
   bool _showTxList = false;
+  final int itemsPerPage = 50;
+  int currentPage = 0;
 
   _getBlockInformation() async {
     // Get Block information
@@ -83,6 +85,29 @@ class _BlockScreenState extends ConsumerState<BlockScreen> {
     setState(() {
       _showTxList = !_showTxList;
     });
+  }
+
+  List<dynamic> get currentItems {
+    final startIndex = currentPage * itemsPerPage;
+    final endIndex = startIndex + itemsPerPage;
+    return _blockInformation!['tx']
+        .sublist(startIndex, endIndex > _blockInformation!['tx'].length ? _blockInformation!['tx'].length : endIndex);
+  }
+
+  void _nextPage() {
+    if ((currentPage + 1) * itemsPerPage < _blockInformation!['tx'].length) {
+      setState(() {
+        currentPage++;
+      });
+    }
+  }
+
+  void _previousPage() {
+    if (currentPage > 0) {
+      setState(() {
+        currentPage--;
+      });
+    }
   }
 
   @override
@@ -172,9 +197,9 @@ class _BlockScreenState extends ConsumerState<BlockScreen> {
                 child: ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: _blockInformation!['tx'].length,
+                  itemCount: currentItems.length,
                   itemBuilder: (context, index) {
-                    final hash = _blockInformation!['tx'][index];
+                    final hash = currentItems[index];
                     return ListTile(
                       title: Text(hash),
                       onTap: () {
@@ -189,6 +214,21 @@ class _BlockScreenState extends ConsumerState<BlockScreen> {
                     );
                   },
                 ),
+              ),
+            if (_showTxList)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton(
+                    onPressed: _previousPage,
+                    child: Text('Previous'),
+                  ),
+                  Text('Page ${currentPage + 1}'),
+                  ElevatedButton(
+                    onPressed: _nextPage,
+                    child: Text('Next'),
+                  ),
+                ],
               ),
           ],          
         ),
