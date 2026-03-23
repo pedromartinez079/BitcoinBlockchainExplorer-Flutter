@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:bitcoin_blockchain_explorer/widgets/card.dart';
-import 'package:bitcoin_blockchain_explorer/screens/wallet.dart';
+import 'package:bitcoin_blockchain_explorer/screens/address.dart';
 import 'package:bitcoin_blockchain_explorer/services/getblock.dart';
 import 'package:bitcoin_blockchain_explorer/providers/settings_provider.dart';
 
@@ -64,11 +64,11 @@ class _TxOutputsCardState extends ConsumerState<TxOutputsCard> {
         List<String> lines = [];
         String? title;
 
-        showWallet() {
+        showAddress() {
           if (txout['scriptPubKey']['address'] != null) {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (ctx) => WalletScreen(address: txout['scriptPubKey']['address']),                
+                builder: (ctx) => AddressScreen(address: txout['scriptPubKey']['address']),                
               )
             );
           }
@@ -88,7 +88,7 @@ class _TxOutputsCardState extends ConsumerState<TxOutputsCard> {
         }
 
         return ExplorerElementCard(
-          onTap: showWallet,
+          onTap: showAddress,
           elements: CardElements(
             title: title,
             textLines: lines,

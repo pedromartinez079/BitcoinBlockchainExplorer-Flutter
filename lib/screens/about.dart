@@ -24,7 +24,7 @@ class AboutScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  'Version 1.0.7',
+                  'Version 1.0.9',
                   style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onSurface,),
                 ),
                 SizedBox(height: 16),

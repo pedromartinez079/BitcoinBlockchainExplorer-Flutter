@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bitcoin_blockchain_explorer/screens/settings.dart';
 import 'package:bitcoin_blockchain_explorer/screens/block.dart';
 import 'package:bitcoin_blockchain_explorer/screens/tx.dart';
-import 'package:bitcoin_blockchain_explorer/screens/wallet.dart';
+import 'package:bitcoin_blockchain_explorer/screens/address.dart';
 import 'package:bitcoin_blockchain_explorer/widgets/card.dart';
 import 'package:bitcoin_blockchain_explorer/services/getblock.dart';
 import 'package:bitcoin_blockchain_explorer/services/blockchain.dart';
@@ -196,7 +196,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (ctx) => WalletScreen(
+                        builder: (ctx) => AddressScreen(
                           address: _searchController.text,
                         ),
                       )

@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 import 'package:bitcoin_blockchain_explorer/screens/networkstatus.dart';
 import 'package:bitcoin_blockchain_explorer/screens/settings.dart';
 import 'package:bitcoin_blockchain_explorer/providers/settings_provider.dart';
+import 'package:bitcoin_blockchain_explorer/providers/wallets_provider.dart';
 
 // Color scheme for Theme
 final colorScheme = ColorScheme.fromSeed(
@@ -35,11 +37,28 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   // Is GetBlock already defined?
   final bool hasToken = prefs.containsKey('token');
-  String? token;  
+  final bool hasWallets = prefs.containsKey('wallets');
+  String? token;
+  String? jsonString;
+  List<Wallet>? wallets;
+
   if (hasToken) {
     token = prefs.getString('token');
   } else {
     token = '';
+  }
+
+  if (hasWallets) {
+    jsonString = prefs.getString('wallets');
+
+    if (jsonString != null) {
+      List<dynamic> jsonData = jsonDecode(jsonString);
+      wallets = jsonData.map((item) => Wallet.fromJson(item)).toList();
+    } else {
+      wallets = [];
+    }
+  } else {
+    wallets = [];
   }
 
   runApp(
@@ -47,6 +66,7 @@ void main() async {
       child: BitcoinBlokchainExplorer(
         hasToken: hasToken,
         token: token!,
+        wallets: wallets,
       )
     )
   );
@@ -57,10 +77,12 @@ class BitcoinBlokchainExplorer extends ConsumerWidget {
     super.key,
     required this.token,
     required this.hasToken,
+    required this.wallets,
   });
 
   final String token;
   final bool hasToken;
+  final List<Wallet> wallets;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -68,6 +90,9 @@ class BitcoinBlokchainExplorer extends ConsumerWidget {
       // Set token in settingsProvider
       final settingsNotifier = ref.read(settingsProvider.notifier);
       settingsNotifier.setSettings(Settings(token: token));
+      // Set wallets in walletsProvider
+      final walletsNotifier = ref.read(walletsProvider.notifier);      
+      walletsNotifier.setWallets(Wallets(wallets: wallets));
     });
 
     return MaterialApp(

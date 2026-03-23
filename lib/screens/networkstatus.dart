@@ -11,6 +11,7 @@ import 'package:bitcoin_blockchain_explorer/screens/settings.dart';
 import 'package:bitcoin_blockchain_explorer/screens/search.dart';
 import 'package:bitcoin_blockchain_explorer/screens/block.dart';
 import 'package:bitcoin_blockchain_explorer/screens/about.dart';
+import 'package:bitcoin_blockchain_explorer/screens/address_tracker.dart';
 import 'package:bitcoin_blockchain_explorer/widgets/card.dart';
 
 class NetworkStatusScreen extends ConsumerStatefulWidget {
@@ -267,6 +268,19 @@ class _NetworkStatusScreenState extends ConsumerState<NetworkStatusScreen> {
               }
             },
             icon: Icon(Icons.currency_bitcoin),
+          ),
+          // Address tracker screen
+          IconButton(
+            onPressed: () {
+              if (_isNetworkStatusFetched) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (ctx) => AddressTrackerScreen(),
+                  )
+                );
+              }
+            },
+            icon: Icon(Icons.track_changes),
           ),
           // Search screen
           IconButton(

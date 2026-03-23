@@ -8,8 +8,8 @@ import 'package:bitcoin_blockchain_explorer/screens/tx.dart';
 import 'package:bitcoin_blockchain_explorer/widgets/card.dart';
 import 'package:bitcoin_blockchain_explorer/services/blockchain.dart';
 
-class WalletScreen extends ConsumerStatefulWidget {
-  const WalletScreen({
+class AddressScreen extends ConsumerStatefulWidget {
+  const AddressScreen({
     super.key,
     required this.address,
   });
@@ -17,27 +17,27 @@ class WalletScreen extends ConsumerStatefulWidget {
   final String address;
 
   @override
-  ConsumerState<WalletScreen> createState() {
-    return _WalletScreenState();
+  ConsumerState<AddressScreen> createState() {
+    return _AddressScreenState();
   }
 }
 
-class _WalletScreenState extends ConsumerState<WalletScreen> {
-  Map<dynamic, dynamic>? _walletInformation;
-  bool _isWalletInformationFetched = false;
+class _AddressScreenState extends ConsumerState<AddressScreen> {
+  Map<dynamic, dynamic>? _addressInformation;
+  bool _isAddressInformationFetched = false;
   Widget? _scaffoldBody;
   bool _showTxList = false;
   
   _getWalletInformation() async {
     // Get wallet information, Blockchain.info API
     try {
-      final walletInformation = await fetchFromBlockchainInfo(
+      final addressInformation = await fetchFromBlockchainInfo(
         'multiaddr?active=${widget.address}');
       
       setState(() {
-        _walletInformation = jsonDecode(walletInformation['data']);
+        _addressInformation = jsonDecode(addressInformation['data']);
       });
-      _isWalletInformationFetched = true;
+      _isAddressInformationFetched = true;
     } catch(e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -59,19 +59,19 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Widget? walletInformation;
+    Widget? addressInformation;
     String title = '';
 
-    if (!_isWalletInformationFetched) {
+    if (!_isAddressInformationFetched) {
       _getWalletInformation();
     }
 
-    if (_walletInformation != null) {
-      for (Map a in _walletInformation!['addresses']) {
+    if (_addressInformation != null) {
+      for (Map a in _addressInformation!['addresses']) {
         title = '$title ${a['address']}';
       }
       // Scaffold body if Wallet information exists
-      walletInformation = Padding(
+      addressInformation = Padding(
         padding: EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -82,9 +82,9 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
                 title: title,
                 textLines: [
                   '',
-                  'Balance(sats): ${_walletInformation!['wallet']['final_balance']}',
-                  'Total received(sats): ${_walletInformation!['wallet']['total_received']}',
-                  'Total sent(sats): ${_walletInformation!['wallet']['total_sent']}',
+                  'Balance(sats): ${_addressInformation!['wallet']['final_balance']}',
+                  'Total received(sats): ${_addressInformation!['wallet']['total_received']}',
+                  'Total sent(sats): ${_addressInformation!['wallet']['total_sent']}',
                 ],
               ), 
               onTap: null,
@@ -96,7 +96,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
                 // List of Txs button
                 Expanded(
                   child: ElevatedButton.icon(
-                    onPressed: _walletInformation!['txs'] != null ?
+                    onPressed: _addressInformation!['txs'] != null ?
                       _onShowTxList : null,
                     icon: Icon(Icons.list),
                     label: Text('List of Txs'),
@@ -118,9 +118,9 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
                 child: ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: _walletInformation!['txs'].length,
+                  itemCount: _addressInformation!['txs'].length,
                   itemBuilder: (context, index) {
-                    final tx = _walletInformation!['txs'][index];
+                    final tx = _addressInformation!['txs'][index];
                     return ListTile(
                       title: Text(tx['hash']),
                       onTap: () {
@@ -140,7 +140,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
         ),
       );
       setState(() {
-        _scaffoldBody = walletInformation;
+        _scaffoldBody = addressInformation;
       });
     } else {
       // Scaffolf Body if Wallet information is not ready
@@ -157,14 +157,14 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Wallet'),
+        title: Text('Address'),
         actions: [
           // Update screen
           IconButton(
             onPressed: () {
               setState(() {
-                _isWalletInformationFetched = false;
-                _walletInformation = null;
+                _isAddressInformationFetched = false;
+                _addressInformation = null;
               });
             },
             icon: Icon(Icons.refresh),
