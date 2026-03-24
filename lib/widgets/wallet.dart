@@ -15,11 +15,13 @@ class WalletCard extends ConsumerStatefulWidget {
     required this.walletName,
     required this.addresses,
     required this.btcPrice,
+    required this.updateWallets,
   });
 
   final String walletName;
   final List<String> addresses;
   final double btcPrice;
+  final Function updateWallets;
 
   @override
   ConsumerState<WalletCard> createState() {
@@ -87,6 +89,15 @@ class _WalletCardState extends ConsumerState<WalletCard> {
     return {'btcValue': btcValue, 'dollarValue': dollarValue};
   }
 
+  _deleteWallet() {
+    ref.read(walletsProvider.notifier).deleteWallet(widget.walletName);
+
+    widget.updateWallets();
+
+    List wList = ref.read(walletsProvider.notifier).getWallets();
+    storeWallets(wList);
+  }
+
   @override
   Widget build(BuildContext context) {
     final titleStyle = Theme.of(context).textTheme.titleMedium;
@@ -105,8 +116,8 @@ class _WalletCardState extends ConsumerState<WalletCard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        InkWell(
-          onLongPressUp: () {print('delete wallet');}, // delete wallet > AddressTrackerScreen function
+        GestureDetector(
+          onVerticalDragEnd: (i) {_deleteWallet();}, // delete wallet > AddressTrackerScreen function
           child: Text('Wallet ${widget.walletName}', style: titleStyle)
         ),
         TextField(
@@ -138,7 +149,16 @@ class _WalletCardState extends ConsumerState<WalletCard> {
                   );
                 }
               }
-              deleteAddress() {}
+              deleteAddress() {
+                ref.read(walletsProvider.notifier).deleteAddress(widget.walletName, a);
+
+                setState(() {
+                  _addresses = ref.read(walletsProvider.notifier).getAddresses(widget.walletName);
+                });
+
+                List wList = ref.read(walletsProvider.notifier).getWallets();
+                storeWallets(wList);                
+              }
               return FutureBuilder(
                 future: _getAddressValues(a),
                 builder: (context, snapshot) {
@@ -152,25 +172,30 @@ class _WalletCardState extends ConsumerState<WalletCard> {
                     double dollarValue = values?['dollarValue'];
                     return SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      child: InkWell(
+                      child: GestureDetector(
                         onTap: showAddress,
-                        onLongPressUp: deleteAddress,
-                        child: Row(
+                        onVerticalDragEnd: (i) {deleteAddress();},
+                        child: Column(
                           children: [
-                            Text(
-                              a,
-                              style: subtitleStyle,
+                            Row(
+                              children: [
+                                Text(
+                                  a,
+                                  style: subtitleStyle,
+                                ),
+                                const SizedBox(width: 15),
+                                Text(
+                                  '$btcValue btc',
+                                  style: subtitleStyle,
+                                ),
+                                const SizedBox(width: 15),
+                                Text(
+                                  '\$ ${dollarValue.toStringAsFixed(2)}',
+                                  style: subtitleStyle,
+                                ),
+                              ],
                             ),
-                            const SizedBox(width: 15),
-                            Text(
-                              '$btcValue btc',
-                              style: subtitleStyle,
-                            ),
-                            const SizedBox(width: 15),
-                            Text(
-                              '\$ ${dollarValue.toStringAsFixed(2)}',
-                              style: subtitleStyle,
-                            ),
+                            const SizedBox(height:5),
                           ],
                         ),
                       ),
@@ -178,7 +203,7 @@ class _WalletCardState extends ConsumerState<WalletCard> {
                   }
                 },
               );
-            }).toList(),                    
+            }).toList(),
           ),
         const SizedBox(height:25),
       ],

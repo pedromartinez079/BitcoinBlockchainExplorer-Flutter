@@ -61,6 +61,20 @@ class WalletsNotifier extends StateNotifier<Wallets> {
       if (w.name == walletName) { w.addresses.add(address); }
     }
   }
+
+  void deleteAddress(walletName, address) {
+    List wList = state.wallets;
+    for (Wallet w in wList) {
+      if (w.name == walletName) {
+        w.addresses.removeWhere((a) => address == a);
+      }
+    }
+  }
+
+  void deleteWallet(walletName) {
+    List wList = state.wallets;
+    wList.removeWhere((w) => walletName == w.name);
+  }
 }
 
 final walletsProvider =

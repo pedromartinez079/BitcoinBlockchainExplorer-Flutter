@@ -35,6 +35,12 @@ class _AddressTrackerScreenState extends ConsumerState<AddressTrackerScreen> {
     });
   }
 
+  _updateWallets() {
+    setState(() {
+      _wallets = ref.read(walletsProvider.notifier).getWallets();
+    });
+  }
+
   _getbtcPrice() async {
     try {
       final fetchedInformation = await fetchFromBlockchainInfo('ticker');
@@ -79,6 +85,13 @@ class _AddressTrackerScreenState extends ConsumerState<AddressTrackerScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                Text(
+                  '+ > Add wallet, add address \n Vertical drag > delete address, delete wallet',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ),
+                const SizedBox(height:10),
                 // Add Wallet 
                 TextField(
                   controller: _walletController,
@@ -103,6 +116,7 @@ class _AddressTrackerScreenState extends ConsumerState<AddressTrackerScreen> {
                       walletName: w.name,
                       addresses: w.addresses,
                       btcPrice: _btcPrice,
+                      updateWallets: _updateWallets,
                     ),).toList(),
                   ),
                   
