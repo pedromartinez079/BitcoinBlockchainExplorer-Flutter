@@ -280,7 +280,7 @@ class _NetworkStatusScreenState extends ConsumerState<NetworkStatusScreen> {
                 );
               }
             },
-            icon: Icon(Icons.track_changes),
+            icon: Icon(Icons.wallet),
           ),
           // Search screen
           IconButton(

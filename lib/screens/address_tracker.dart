@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:bitcoin_blockchain_explorer/services/blockchain.dart';
 import 'package:bitcoin_blockchain_explorer/widgets/wallet.dart';
 import 'package:flutter/material.dart';
@@ -26,18 +25,21 @@ class _AddressTrackerScreenState extends ConsumerState<AddressTrackerScreen> {
 
   _addWallet() {
     final name = _walletController.text;
-    if (name.isEmpty || name == '') {
+    final regex = RegExp(r'^[a-zA-Z0-9]$');
+    if (name.isEmpty || name == '' || !regex.hasMatch(name[0])) {
       return;
     }
     ref.read(walletsProvider.notifier).addWallet(Wallet(name: name, addresses:[]));
     setState(() {
       _wallets = ref.read(walletsProvider.notifier).getWallets();
+      _showWallets = _wallets.isNotEmpty;
     });
   }
 
   _updateWallets() {
     setState(() {
       _wallets = ref.read(walletsProvider.notifier).getWallets();
+      _showWallets = _wallets.isNotEmpty;
     });
   }
 
@@ -56,19 +58,19 @@ class _AddressTrackerScreenState extends ConsumerState<AddressTrackerScreen> {
       isBtcPriceFetched = true;
     });
   }
+
+  @override
+  void initState() {
+    super.initState();
+    _wallets = ref.read(walletsProvider.notifier).getWallets();
+    if (_wallets.isNotEmpty) {
+      _showWallets = true;
+    }
+  }
   
   @override
   Widget build(BuildContext context) {
-    //print(ref.read(walletsProvider.notifier).getWallets());
-    setState(() {
-      _wallets = ref.read(walletsProvider.notifier).getWallets();
-    });
-
-    if (_wallets.isNotEmpty) {
-      setState(() {
-        _showWallets = true;
-      });
-    }
+    final titleStyle = Theme.of(context).textTheme.titleMedium;
 
     if (!isBtcPriceFetched) {
       _getbtcPrice();
@@ -76,7 +78,14 @@ class _AddressTrackerScreenState extends ConsumerState<AddressTrackerScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Address Tracker | Bitcoin USD ${_btcPrice.toStringAsFixed(2)}'),        
+        title: Text('Address Tracker'),
+        actions: [
+          // Update screen
+          IconButton(
+            onPressed: _updateWallets,
+            icon: Icon(Icons.refresh),
+          ),
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -86,7 +95,13 @@ class _AddressTrackerScreenState extends ConsumerState<AddressTrackerScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  '+ > Add wallet, add address \n Vertical drag > delete address, delete wallet',
+                  'Bitcoin USD ${_btcPrice.toStringAsFixed(2)}',
+                  style: titleStyle,
+                ),
+                const SizedBox(height:20),
+                Text(                  
+                  '+ -> add wallet, add address\n'
+                  'Vertical drag -> delete address, delete wallet',
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onSurface,
                   ),

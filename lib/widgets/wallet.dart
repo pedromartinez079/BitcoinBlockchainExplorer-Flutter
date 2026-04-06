@@ -1,6 +1,4 @@
-
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,6 +31,7 @@ class _WalletCardState extends ConsumerState<WalletCard> {
   final _addressController = TextEditingController();
   List<dynamic> _addresses = [];
   bool _showAddresses = false;
+  double _walletTotal = 0;
 
   Future<void> storeWallets(List wallets) async {
     final prefs = await SharedPreferences.getInstance();
@@ -60,7 +59,8 @@ class _WalletCardState extends ConsumerState<WalletCard> {
 
   _addAddress() {
     final address = _addressController.text;
-    if (address.isEmpty || address == '') {
+    final regex = RegExp(r'^[a-zA-Z0-9]$');
+    if (address.isEmpty || address == '' || !regex.hasMatch(address[0])) {
       return;
     }
 
@@ -68,7 +68,10 @@ class _WalletCardState extends ConsumerState<WalletCard> {
 
     setState(() {
       _addresses = ref.read(walletsProvider.notifier).getAddresses(widget.walletName);
+      _showAddresses = _addresses.isNotEmpty;
     });
+
+    _calculateWalletTotal();
 
     List wList = ref.read(walletsProvider.notifier).getWallets();
     storeWallets(wList);
@@ -81,12 +84,23 @@ class _WalletCardState extends ConsumerState<WalletCard> {
       final fetchedInformation = await fetchFromBlockchainInfo('balance?active=$address');
       final addressInformation = jsonDecode(fetchedInformation['data']);
       btcValue = addressInformation[address]['final_balance'] / 100000000;
-      dollarValue = btcValue * widget.btcPrice;
+      dollarValue = btcValue * widget.btcPrice; 
     } catch(e) {
       btcValue = 0;
       dollarValue = 0;
     }
     return {'btcValue': btcValue, 'dollarValue': dollarValue};
+  }
+
+  Future<void> _calculateWalletTotal() async {
+    double total = 0;
+    for (String address in _addresses) {
+      final values = await _getAddressValues(address);
+      total += values['dollarValue'];
+    }
+    setState(() {
+      _walletTotal = total;
+    });
   }
 
   _deleteWallet() {
@@ -99,26 +113,26 @@ class _WalletCardState extends ConsumerState<WalletCard> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _addresses = ref.read(walletsProvider.notifier).getAddresses(widget.walletName);
+    if (_addresses.isNotEmpty) {
+      _showAddresses = true;
+      _calculateWalletTotal();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final titleStyle = Theme.of(context).textTheme.titleMedium;
     final subtitleStyle = Theme.of(context).textTheme.titleSmall;
-
-    setState(() {
-      _addresses = ref.read(walletsProvider.notifier).getAddresses(widget.walletName);
-    });    
-
-    if (_addresses.isNotEmpty) {
-      setState(() {
-        _showAddresses = true;
-      });
-    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         GestureDetector(
-          onVerticalDragEnd: (i) {_deleteWallet();}, // delete wallet > AddressTrackerScreen function
-          child: Text('Wallet ${widget.walletName}', style: titleStyle)
+          onVerticalDragEnd: (i) {_deleteWallet();},
+          child: Text('Wallet ${widget.walletName} | USD ${_walletTotal.toStringAsFixed(2)}', style: titleStyle)
         ),
         TextField(
           controller: _addressController,
@@ -130,8 +144,8 @@ class _WalletCardState extends ConsumerState<WalletCard> {
                     Icons.add,
                   ),
                   onPressed: _addAddress,
-                ),              
-            ),          
+                ),
+            ),
           style: TextStyle(
             color: Theme.of(context).colorScheme.onSurface,
           ),
@@ -154,7 +168,10 @@ class _WalletCardState extends ConsumerState<WalletCard> {
 
                 setState(() {
                   _addresses = ref.read(walletsProvider.notifier).getAddresses(widget.walletName);
+                  _showAddresses = _addresses.isNotEmpty;
                 });
+
+                _calculateWalletTotal();
 
                 List wList = ref.read(walletsProvider.notifier).getWallets();
                 storeWallets(wList);                
@@ -163,13 +180,17 @@ class _WalletCardState extends ConsumerState<WalletCard> {
                 future: _getAddressValues(a),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                    return SizedBox(
+                      width: 15,
+                      height: 15,
+                      child: CircularProgressIndicator()
+                    );
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else {
                     var values = snapshot.data;
                     double btcValue = values?['btcValue'];
-                    double dollarValue = values?['dollarValue'];
+                    double dollarValue = values?['dollarValue'];                 
                     return SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: GestureDetector(

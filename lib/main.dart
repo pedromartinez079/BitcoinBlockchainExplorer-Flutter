@@ -35,7 +35,7 @@ final theme = ThemeData().copyWith(
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
-  // Is GetBlock already defined?
+  // GetBlock or Wallets already defined?
   final bool hasToken = prefs.containsKey('token');
   final bool hasWallets = prefs.containsKey('wallets');
   String? token;
